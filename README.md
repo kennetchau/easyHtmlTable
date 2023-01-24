@@ -3,7 +3,7 @@
 A simple script that will read a specific sheet of an excel workbook and export it as a simple html table. (Includes html tag as well!)
 
 ## Parameters
-- filename: str # The filename of the excel sheet
+- filename: str
 - sheetname: str
 - containHyper:int = None
 - firstColumn = 1
