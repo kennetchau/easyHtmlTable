@@ -5,7 +5,6 @@
 """
 
 import openpyxl
-import re
 
 # Define the easyHtmlTable function
 def easyHtmlTable(filename: str, sheetname: str, containHyper:int = None, firstColumn = 1, firstRow = 1, headerRow = True, htmlTableClass:str = None, htmlTableId:str = None):
@@ -33,17 +32,17 @@ def easyHtmlTable(filename: str, sheetname: str, containHyper:int = None, firstC
             if containHyper == None:
                 rowElement.append(workSheet.cell(row = rowNo, column = columnNo).value)
             elif (columnNo == containHyper):
-                HyperObject = {}
+                HyperList = []
                 target = workSheet.cell(row = rowNo, column = columnNo).value
-                # Due to openpyxl bug in reading hyperlink, manual split is needed
-                target = target[target.find("("):][1:-1].split(',')
-                tag = target[1]
-                html = target[0]
-                HyperObject[tag] = html
-                rowElement.append(HyperObject)
+                # Due to openpyxl bug in reading hyperlink, use string formatting
+                target = target[target.find("("):][1:-1].replace('"','').split(',')
+                HyperList.append(target[1].strip())
+                HyperList.append(target[0].strip())
+                rowElement.append(HyperList)
             else:
                 rowElement.append(workSheet.cell(row = rowNo, column = columnNo).value)
-        print(rowElement)
+        body.append(rowElement)
+    
 
     # Assemble the html header
     HeaderElements = ''
@@ -52,12 +51,39 @@ def easyHtmlTable(filename: str, sheetname: str, containHyper:int = None, firstC
     header = "<thead>\n<tr>{}</tr>\n</thead>".format(HeaderElements)
     
     # Assemble the body
-    
+    BodyElements = ''
+    for row in body:
+        rowElement = ''
+        Entry = ''
+        for element in row:
+            if type(element) is list:
+                rowElement = '<td><a href="{}">{}</a></td>'.format(element[1], element[0])
+            else:
+                rowElement = "<td>{}</td>".format(element)
+            Entry =  Entry + rowElement + '\n'
+        BodyElements = BodyElements + '\n<tr>\n' + Entry + '\n</tr>'
+    body = '<tbody>\n{}\n</tbody>'.format(BodyElements)
+
+    # Assemble the table tag
+    tableTag = 'table'
+    if htmlTableClass != None:
+        tableTag = tableTag + ' class="{}"'.format(htmlTableClass)
+    if htmlTableId != None:
+        tableTag = tableTag + ' id="{}"'.format(htmlTableId)
+    tableTag = "<{}>\n{{}}\n</table>".format(tableTag)
+
+    # Assemble the html
+    htmlBody = tableTag.format(header + '\n' + body)
+
+    # Write the output html file
+    with open('output.html','w') as output:
+        output.write(htmlBody)
+
 
 
 
 def main():
-    easyHtmlTable('Book 4.xlsx', 'Sheet1', containHyper = 1)
+    easyHtmlTable('Book 4.xlsx', 'Sheet1', containHyper = 1, htmlTableId= 'test')
 
 if __name__ == "__main__":
     main()
