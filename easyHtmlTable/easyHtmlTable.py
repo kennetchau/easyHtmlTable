@@ -33,9 +33,14 @@ def easyHtmlTable(filename: str, sheetname: str, containHyper:int = None, firstC
                 rowElement.append(workSheet.cell(row = rowNo, column = columnNo).value)
             elif (columnNo == containHyper):
                 HyperList = []
-                target = workSheet.cell(row = rowNo, column = columnNo).value
+                try:
+                    target = []
+                    target.append(workSheet.cell(row = rowNo, column = columnNo).hyperlink.target)
+                    target.append(workSheet.cell(row = rowNo, column = columnNo).value)
                 # Due to openpyxl bug in reading hyperlink, use string formatting
-                target = target[target.find("("):][1:-1].replace('"','').split(',')
+                except:
+                    target = workSheet.cell(row = rowNo, column = columnNo).value
+                    target = target[target.find("("):][1:-1].replace('"','').split(',')
                 HyperList.append(target[1].strip())
                 HyperList.append(target[0].strip())
                 rowElement.append(HyperList)
@@ -76,14 +81,14 @@ def easyHtmlTable(filename: str, sheetname: str, containHyper:int = None, firstC
     htmlBody = tableTag.format(header + '\n' + body)
 
     # Write the output html file
-    with open('output.html','w') as output:
+    with open('output.html','w', encoding = 'utf-8-sig') as output:
         output.write(htmlBody)
 
 
 
 
 def main():
-    easyHtmlTable('Book 4.xlsx', 'Sheet1', containHyper = 1, htmlTableId= 'test')
+    easyHtmlTable('SAP Ariba_resource guides (3).xlsx', 'Sheet1', containHyper = 1, htmlTableId= 'SAPAribaResourceGuide', htmlTableClass='wb-tables table')
 
 if __name__ == "__main__":
     main()
