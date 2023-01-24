@@ -22,13 +22,13 @@ def easyHtmlTable(filename: str, sheetname: str, containHyper:int = None, firstC
 
     # Grab the header and store it in the list
     if headerRow == True: 
-        for item in range(firstColumn, maxColumn+ 1):
+        for item in range(firstColumn, maxColumn):
             header.append(workSheet.cell(firstRow, column = item).value)
     
     # get the body and store them in the list of list
     for rowNo in range(firstRow + 1, maxRow +1):
         rowElement = []
-        for columnNo in range(1, maxColumn + 1):
+        for columnNo in range(1, maxColumn):
             if containHyper == None:
                 rowElement.append(workSheet.cell(row = rowNo, column = columnNo).value)
             elif (columnNo == containHyper):
