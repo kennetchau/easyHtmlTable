@@ -33,8 +33,8 @@ def easyHtmlTable(filename: str, sheetname: str, containHyper:int = None, firstC
                 rowElement.append(workSheet.cell(row = rowNo, column = columnNo).value)
             elif (columnNo == containHyper):
                 HyperList = []
+                target = []
                 try:
-                    target = []
                     target.append(workSheet.cell(row = rowNo, column = columnNo).hyperlink.target)
                     target.append(workSheet.cell(row = rowNo, column = columnNo).value)
                 # Due to openpyxl bug in reading hyperlink, use string formatting
