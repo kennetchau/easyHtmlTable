@@ -20,4 +20,4 @@ A simple script that will read a specific sheet of an excel workbook and export 
 
 ## Author
 Name: Ming Yin Kenneth Chau
-Contact: kennetchau@gmail.com
+<br>Contact: kennetchau@gmail.com
