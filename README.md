@@ -17,3 +17,7 @@ A simple script that will read a specific sheet of an excel workbook and export 
 - headerRow = True
 - htmlTableClass:str = None
 - htmlTableId:str = None
+
+## Author
+Name: Ming Yin Kenneth Chau
+Contact: kennetchau@gmail.com
